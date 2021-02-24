@@ -9,6 +9,25 @@ readme = "README.md"
 edition = "2018"
 publish = true
 
+exclude = [
+    ".cargo/",
+    ".github/",
+    ".vscode/",
+    "Config/",
+    "Documentation/",
+    "Examples/C",
+    "Examples/Cpp",
+    "Examples/CSharp",
+    "Scripts/",
+    "Vendor/",
+    ".editorconfig",
+    ".gitattributes",
+    ".gitmodules",
+    "GenerateProjectFiles.*",
+    "premake5.lua",
+    "*.code-workspace",
+]
+
 [lib]
 name="TribuFu"
 crate-type = ["staticlib", "cdylib", "rlib"]
