@@ -1,0 +1,26 @@
+[package]
+name = "tribufu"
+version = "0.0.1"
+description = "TribuFu SDK"
+repository = "https://github.com/TribuFu/SDK"
+authors = ["TribuFu <contact@tribufu.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+edition = "2018"
+publish = true
+
+[lib]
+name="TribuFu"
+crate-type = ["staticlib", "cdylib", "rlib"]
+path = "Source/TribuFu.rs"
+
+[dependencies]
+libc = "0.2.0"
+tokio = { version = "1.2.0", features = ["full"] }
+reqwest = { version = "0.11.1", features = ["blocking", "json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[[example]]
+name="Hello"
+path = "Examples/Rust/Hello.rs"
