@@ -22,7 +22,6 @@ exclude = [
     "Vendor/",
     ".editorconfig",
     ".gitattributes",
-    ".gitmodules",
     "GenerateProjectFiles.*",
     "premake5.lua",
     "*.code-workspace",
