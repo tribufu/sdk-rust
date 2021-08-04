@@ -1,6 +1,6 @@
 [package]
 name = "tribufu"
-version = "0.0.1"
+version = "0.0.2"
 description = "TribuFu SDK"
 repository = "https://github.com/TribuFu/SDK"
 authors = ["TribuFu <contact@tribufu.com>"]
