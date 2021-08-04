@@ -1,38 +1,10 @@
 # Binary Files
 
 Binaries/
-Intermediate/
 
 # Cargo Files
 
 Cargo.lock
-
-# FFI Bindings
-
-Source/Header.h
-
-# Packaged Library
-
-Package/
-
-# Visual Studio Project Files
-
-.vs/
-
-*.sln
-*.vcxproj
-*.csproj
-*.filters
-*.user
-
-# CMake Project Files
-
-Makefile
-
-# Xcode Project Files
-
-*.xcodeproj
-*.xcworkspace
 
 # Mac OSX
 

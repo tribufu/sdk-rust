@@ -10,35 +10,19 @@ edition = "2018"
 publish = true
 
 exclude = [
-    ".cargo/",
     ".github/",
     ".vscode/",
-    "Config/",
     "Documentation/",
-    "Examples/C",
-    "Examples/Cpp",
-    "Examples/CSharp",
-    "Scripts/",
-    "Vendor/",
     ".editorconfig",
     ".gitattributes",
-    "GenerateProjectFiles.*",
-    "premake5.lua",
     "*.code-workspace",
+    "Bootstrap.ps1",
+    "Bootstrap.sh",
 ]
 
 [lib]
 name="TribuFu"
-crate-type = ["staticlib", "cdylib", "rlib"]
+crate-type = ["rlib"]
 path = "Source/TribuFu.rs"
 
 [dependencies]
-libc = "0.2.0"
-tokio = { version = "1.2.0", features = ["full"] }
-reqwest = { version = "0.11.1", features = ["blocking", "json"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-
-[[example]]
-name="Hello"
-path = "Examples/Rust/Hello.rs"
