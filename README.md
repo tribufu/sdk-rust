@@ -1,1 +1,1 @@
-# TribuFu Rust SDK
+# DevKit Rust
