@@ -1,11 +1,6 @@
-# Binary Files
-
-Binaries/
-
-# Cargo Files
-
-Cargo.lock
-
-# Mac OSX
+[Bb]inaries/
+[Ii]ntermediate/
 
 .DS_Store
+Cargo.lock
+desktop.ini

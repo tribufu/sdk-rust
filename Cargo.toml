@@ -1,28 +1,24 @@
 [package]
 name = "tribufu"
-version = "0.0.2"
+version = "0.0.3"
 description = "TribuFu SDK"
-repository = "https://github.com/TribuFu/SDK"
+repository = "https://github.com/TribuFu/SDK-RS"
 authors = ["TribuFu <contact@tribufu.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-edition = "2018"
+edition = "2021"
 publish = true
 
 exclude = [
     ".github/",
     ".vscode/",
-    "Documentation/",
     ".editorconfig",
     ".gitattributes",
-    "*.code-workspace",
-    "Bootstrap.ps1",
-    "Bootstrap.sh",
 ]
 
 [lib]
-name="TribuFu"
+name = "TribuFu"
 crate-type = ["rlib"]
-path = "Source/TribuFu.rs"
+path = "Source/lib.rs"
 
 [dependencies]
