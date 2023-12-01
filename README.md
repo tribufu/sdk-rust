@@ -1,1 +1,1 @@
-# DevKit Rust
+# Rust SDK
