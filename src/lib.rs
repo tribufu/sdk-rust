@@ -3,11 +3,14 @@
 #![allow(dead_code)]
 
 use alnilam_consts::TARGET_TRIPLE;
-use anyhow::Result;
+use anyhow::{Error, Result};
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::Client;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+pub mod oauth2;
+pub mod token;
 
 #[derive(Clone)]
 pub struct TribufuClient {
@@ -17,7 +20,7 @@ pub struct TribufuClient {
 }
 
 impl TribufuClient {
-    const BASE_URL: &'static str = "https://api.tribufu.com";
+    const BASE_URL: &'static str = "http://localhost:5000";
 
     pub fn new(id: u64, secret: impl Into<String>) -> Result<TribufuClient> {
         let user_agent = format!(
@@ -43,6 +46,41 @@ impl TribufuClient {
 
     pub fn id(&self) -> u64 {
         self.client_id
+    }
+
+    pub async fn get_token(&self) -> Result<oauth2::OAuth2TokenResponse> {
+        let body = oauth2::OAuth2TokenRequest {
+            grant_type: oauth2::OAuth2GrantType::ClientCredentials,
+            code: None,
+            refresh_token: None,
+            username: None,
+            password: None,
+            client_id: self.client_id.to_string(),
+            client_secret: self.client_secret.clone(),
+            redirect_uri: None,
+        };
+
+        let response = match self
+            .http
+            .post(format!("{}/v1/oauth2/token", Self::BASE_URL))
+            .form(&body)
+            .send()
+            .await
+        {
+            Ok(r) => r,
+            Err(e) => return Err(e.into()),
+        };
+
+        if response.status() != 200 {
+            return Err(Error::msg(format!(
+                "Failed to get token: {}",
+                response.status()
+            )));
+        }
+
+        let token = response.json::<oauth2::OAuth2TokenResponse>().await?;
+
+        Ok(token)
     }
 }
 
