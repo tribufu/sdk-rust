@@ -4,8 +4,10 @@
 
 use alnilam_consts::TARGET_TRIPLE;
 use anyhow::{Error, Result};
+use chrono::NaiveDateTime;
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::Client;
+use serde::{Deserialize, Serialize};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -55,8 +57,8 @@ impl TribufuClient {
             refresh_token: None,
             username: None,
             password: None,
-            client_id: self.client_id.to_string(),
-            client_secret: self.client_secret.clone(),
+            client_id: Some(self.client_id.to_string()),
+            client_secret: Some(self.client_secret.clone()),
             redirect_uri: None,
         };
 
