@@ -4,10 +4,8 @@
 
 use alnilam_consts::TARGET_TRIPLE;
 use anyhow::{Error, Result};
-use chrono::NaiveDateTime;
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::Client;
-use serde::{Deserialize, Serialize};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
