@@ -86,29 +86,34 @@ pub struct OAuth2ErrorResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OAuth2TokenRequest {
     pub grant_type: OAuth2GrantType,
-    pub client_id: Option<String>,
-    pub client_secret: Option<String>,
-    pub redirect_uri: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_secret: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redirect_uri: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OAuth2TokenResponse {
     pub token_type: OAuth2TokenType,
-
     pub access_token: String,
-
-    pub refresh_token: String,
-
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
-
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-
     pub expires_in: u64,
 }
 

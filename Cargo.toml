@@ -19,11 +19,12 @@ path = "src/lib.rs"
 [dependencies]
 alnilam-consts = { version = "0.0.4" }
 anyhow = "1.0.75"
+chrono = { version = "0.4.22", features = ["serde", "rustc-serialize"] }
 derive_more = "0.99.17"
 reqwest = { version = "0.11.18", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0", features = ["raw_value"] }
-chrono = { version = "0.4.22", features = ["serde", "rustc-serialize"] }
+serde_with = "3.4.0"
 
 [dev-dependencies]
 dotenv = "0.15.0"
