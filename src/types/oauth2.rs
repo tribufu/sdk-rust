@@ -155,7 +155,7 @@ pub struct OAuth2IntrospectionResponse {
 }
 
 impl OAuth2IntrospectionResponse {
-    fn inative() -> Self {
+    pub fn inative() -> Self {
         Self {
             active: false,
             client_id: None,

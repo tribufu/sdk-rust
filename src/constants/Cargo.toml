@@ -1,7 +1,7 @@
 [package]
-name = "tribufu-actix"
+name = "tribufu-constants"
 version = "0.0.4"
-description = "Tribufu Actix Extension"
+description = "Tribufu Constants"
 repository = "https://github.com/Tribufu/TribufuRust"
 authors = ["Tribufu <contact@tribufu.com>"]
 license = "Apache-2.0"
@@ -10,11 +10,8 @@ edition = "2021"
 publish = true
 
 [lib]
-name = "tribufu_actix"
+name = "tribufu_constants"
 crate-type = ["rlib"]
 path = "lib.rs"
 
 [dependencies]
-actix-web = { version = "4", features = ["rustls"] }
-mintaka-error = { version = "0.0.1" }
-tribufu-api = { path = "../api" }

@@ -1,17 +1,16 @@
 // Copyright (c) Tribufu. All Rights Reserved.
 
-use crate::games::Game;
-use crate::oauth2::{OAuth2GrantType, OAuth2TokenRequest, OAuth2TokenResponse};
-use crate::users::*;
-use crate::VERSION;
 use alnilam_consts::TARGET_TRIPLE;
 use base64::engine::general_purpose::STANDARD as BASE64;
 use base64::Engine as _;
-use chrono::{NaiveDateTime, Utc};
 use mintaka_error::{Error, Result};
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use reqwest::Client;
 use std::env;
+use tribufu_constants::VERSION;
+use tribufu_types::games::Game;
+use tribufu_types::oauth2::{OAuth2GrantType, OAuth2TokenRequest, OAuth2TokenResponse};
+use tribufu_types::users::*;
 
 pub enum CredentialsType {
     Anonymous,
@@ -24,8 +23,6 @@ pub struct TribufuApi {
     base_url: String,
     credentials: Option<String>,
     credentials_kind: CredentialsType,
-    credentials_refreshed_at: Option<NaiveDateTime>,
-    credentials_expires_at: Option<NaiveDateTime>,
     http: Client,
 }
 
@@ -49,8 +46,6 @@ impl TribufuApi {
             base_url: Self::BASE_URL.to_string(),
             credentials,
             credentials_kind,
-            credentials_refreshed_at: None,
-            credentials_expires_at: None,
             http,
         }
     }
@@ -89,7 +84,7 @@ impl TribufuApi {
 
     pub fn with_token(token: String) -> Self {
         let mut api = Self::default();
-        api.use_token(token);
+        api.use_bearer(token);
         api
     }
 
@@ -105,8 +100,8 @@ impl TribufuApi {
             self.set_base_url(base_url);
         }
 
-        if let Ok(api_key) = env::var("TRIBUFU_API_KEY") {
-            self.use_api_key(api_key);
+        if let Ok(token) = env::var("TRIBUFU_TOKEN") {
+            self.use_bearer(token);
         }
 
         let client_id = env::var("TRIBUFU_CLIENT_ID");
@@ -116,8 +111,8 @@ impl TribufuApi {
             self.use_client(client_id.parse().unwrap(), client_secret);
         }
 
-        if let Ok(token) = env::var("TRIBUFU_TOKEN") {
-            self.use_token(token);
+        if let Ok(api_key) = env::var("TRIBUFU_API_KEY") {
+            self.use_api_key(api_key);
         }
     }
 
@@ -131,15 +126,19 @@ impl TribufuApi {
         self.credentials = Some(api_key);
     }
 
-    pub fn use_client(&mut self, client_id: u64, client_secret: String) {
-        let credentials_str = format!("{}:{}", client_id, client_secret);
+    pub fn use_basic(&mut self, basic_token: String) {
         self.credentials_kind = CredentialsType::Basic;
-        self.credentials = Some(BASE64.encode(credentials_str.as_bytes()));
+        self.credentials = Some(basic_token);
     }
 
-    pub fn use_token(&mut self, token: String) {
+    pub fn use_bearer(&mut self, bearer_token: String) {
         self.credentials_kind = CredentialsType::Bearer;
-        self.credentials = Some(token);
+        self.credentials = Some(bearer_token);
+    }
+
+    pub fn use_client(&mut self, client_id: u64, client_secret: String) {
+        let credentials_str = format!("{}:{}", client_id, client_secret);
+        self.use_basic(BASE64.encode(credentials_str.as_bytes()));
     }
 
     fn set_base_url(&mut self, base_url: String) {
@@ -288,7 +287,7 @@ impl TribufuApi {
     }
 
     async fn get_oauth_token(
-        &mut self,
+        &self,
         grant_type: OAuth2GrantType,
         grant_value: Option<String>,
         client_id: u64,
@@ -365,11 +364,7 @@ impl TribufuApi {
             )));
         }
 
-        let response_body: OAuth2TokenResponse = response.json().await?;
-
-        self.use_token(response_body.clone().access_token);
-
-        Ok(response_body)
+        Ok(response.json().await?)
     }
 
     pub async fn get_user_info(&self) -> Result<User> {

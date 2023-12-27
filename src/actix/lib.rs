@@ -1,29 +1,35 @@
 // Copyright (c) Tribufu. All Rights Reserved.
 
-/*
 use actix_web::HttpRequest;
+use tribufu_api::TribufuApi;
 
 pub trait TribufuApiActixExtension {
-    fn use_anonymous(req: &HttpRequest) -> Self;
+    fn from_actix(req: &HttpRequest) -> Self;
+    fn use_actix(&mut self, req: &HttpRequest);
 }
 
-impl TribufuApi {
-    pub fn from_actix(req: &HttpRequest) -> Self {
-        let mut api = Self::default();
+impl TribufuApiActixExtension for TribufuApi {
+    fn from_actix(req: &HttpRequest) -> Self {
+        let mut api = Self::from_env();
+        api.use_actix(req);
+        api
+    }
 
-        if let Some(api_key) = req.headers().get("X-Tribufu-Api-Key") {
-            api.use_api_key(api_key.to_str().unwrap().to_string());
-        }
-
+    fn use_actix(&mut self, req: &HttpRequest) {
         if let Some(authorization) = req.headers().get("Authorization") {
             let authorization = authorization.to_str().unwrap();
 
+            if authorization.starts_with("ApiKey ") {
+                self.use_api_key(authorization[7..].to_string());
+            }
+
+            if authorization.starts_with("Basic ") {
+                self.use_basic(authorization[6..].to_string());
+            }
+
             if authorization.starts_with("Bearer ") {
-                api.use_token(authorization[7..].to_string());
+                self.use_bearer(authorization[7..].to_string());
             }
         }
-
-        api
     }
 }
-*/
