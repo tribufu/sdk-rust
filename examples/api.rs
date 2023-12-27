@@ -4,5 +4,6 @@ use tribufu::*;
 
 #[tokio::main]
 async fn main() {
-    let mut api = TribufuApi::from_env();
+    let mut api = TribufuApi::default();
+    api.use_anonymous();
 }

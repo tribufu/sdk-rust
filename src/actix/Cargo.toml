@@ -1,0 +1,18 @@
+[package]
+name = "tribufu-actix"
+version = "0.0.4"
+description = "Tribufu Actix Extension"
+repository = "https://github.com/Tribufu/TribufuRust"
+authors = ["Tribufu <contact@tribufu.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+edition = "2021"
+publish = true
+
+[lib]
+name = "tribufu_actix"
+crate-type = ["rlib"]
+path = "lib.rs"
+
+[dependencies]
+actix-web = { version = "4", features = ["rustls"] }

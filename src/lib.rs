@@ -4,9 +4,9 @@
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-pub mod client;
+pub mod api;
 pub mod games;
 pub mod oauth2;
-pub mod token;
+pub mod users;
 
-pub use client::*;
+pub use api::*;
