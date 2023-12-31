@@ -1,8 +1,6 @@
 // Copyright (c) Tribufu. All Rights Reserved.
 
 use alnilam_consts::TARGET_TRIPLE;
-use base64::engine::general_purpose::STANDARD as BASE64;
-use base64::Engine as _;
 use mintaka_error::{Error, Result};
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use reqwest::Client;
