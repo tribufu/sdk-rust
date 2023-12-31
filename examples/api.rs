@@ -4,6 +4,7 @@ use tribufu::*;
 
 #[tokio::main]
 async fn main() {
-    let mut api = TribufuApi::default();
-    api.use_anonymous();
+    let api = TribufuApi::default();
+    let games = api.get_games(Some(1)).await.unwrap();
+    println!("{:?}", games);
 }

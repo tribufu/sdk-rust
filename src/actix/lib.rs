@@ -5,31 +5,20 @@ use tribufu_api::TribufuApi;
 
 pub trait TribufuApiActixExtension {
     fn from_actix(req: &HttpRequest) -> Self;
-    fn use_actix(&mut self, req: &HttpRequest);
 }
 
 impl TribufuApiActixExtension for TribufuApi {
     fn from_actix(req: &HttpRequest) -> Self {
-        let mut api = Self::from_env();
-        api.use_actix(req);
-        api
-    }
+        let mut api = Self::with_client_from_env().unwrap_or_default();
 
-    fn use_actix(&mut self, req: &HttpRequest) {
         if let Some(authorization) = req.headers().get("Authorization") {
             let authorization = authorization.to_str().unwrap();
 
-            if authorization.starts_with("ApiKey ") {
-                self.use_api_key(authorization[7..].to_string());
-            }
-
-            if authorization.starts_with("Basic ") {
-                self.use_basic(authorization[6..].to_string());
-            }
-
             if authorization.starts_with("Bearer ") {
-                self.use_bearer(authorization[7..].to_string());
+                api = Self::with_user(authorization[7..].to_string());
             }
         }
+
+        return api;
     }
 }

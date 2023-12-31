@@ -12,30 +12,47 @@ use tribufu_types::games::Game;
 use tribufu_types::oauth2::{OAuth2GrantType, OAuth2TokenRequest, OAuth2TokenResponse};
 use tribufu_types::users::*;
 
-pub enum CredentialsType {
+pub enum Credentials {
     Anonymous,
-    ApiKey,
-    Basic,
-    Bearer,
+    ApiKey {
+        api_key: String,
+    },
+    Client {
+        client_id: u64,
+        client_secret: String,
+    },
+}
+
+pub enum Token {
+    ApiKey {
+        api_key: String,
+    },
+    Basic {
+        basic_token: String,
+    },
+    Bearer {
+        access_token: String,
+        refresh_token: Option<String>,
+    },
 }
 
 pub struct TribufuApi {
     base_url: String,
-    credentials: Option<String>,
-    credentials_kind: CredentialsType,
+    credentials: Credentials,
+    token: Option<Token>,
     http: Client,
 }
 
 impl Default for TribufuApi {
     fn default() -> Self {
-        Self::new(CredentialsType::Anonymous, None)
+        Self::new(Credentials::Anonymous)
     }
 }
 
 impl TribufuApi {
-    const BASE_URL: &'static str = "https://api.tribufu.com";
+    const TRIBUFU_API_URL: &'static str = "https://api.tribufu.com";
 
-    pub fn new(credentials_kind: CredentialsType, credentials: Option<String>) -> Self {
+    pub fn new(credentials: Credentials) -> Self {
         let http = Client::builder()
             .user_agent(Self::user_agent())
             .default_headers(Self::default_headers())
@@ -43,9 +60,9 @@ impl TribufuApi {
             .unwrap();
 
         Self {
-            base_url: Self::BASE_URL.to_string(),
+            base_url: Self::get_base_url(),
             credentials,
-            credentials_kind,
+            token: None,
             http,
         }
     }
@@ -70,114 +87,97 @@ impl TribufuApi {
         headers
     }
 
+    fn get_base_url() -> String {
+        if cfg!(debug_assertions) {
+            return env::var("TRIBUFU_API_URL")
+                .unwrap_or_else(|_| Self::TRIBUFU_API_URL.to_string());
+        }
+
+        Self::TRIBUFU_API_URL.to_string()
+    }
+
     pub fn with_api_key(api_key: String) -> Self {
-        let mut api = Self::default();
-        api.use_api_key(api_key);
-        api
+        Self::new(Credentials::ApiKey { api_key })
     }
 
     pub fn with_client(client_id: u64, client_secret: String) -> Self {
-        let mut api = Self::default();
-        api.use_client(client_id, client_secret);
-        api
+        Self::new(Credentials::Client {
+            client_id,
+            client_secret,
+        })
     }
 
-    pub fn with_token(token: String) -> Self {
-        let mut api = Self::default();
-        api.use_bearer(token);
-        api
-    }
-
-    pub fn from_env() -> Self {
-        let mut api = Self::default();
-        api.use_env();
-        api
-    }
-
-    pub fn use_env(&mut self) {
-        #[cfg(debug_assertions)]
-        if let Ok(base_url) = env::var("TRIBUFU_API_URL") {
-            self.set_base_url(base_url);
+    pub fn with_api_key_from_env() -> Option<Self> {
+        if let Ok(api_key) = env::var("TRIBUFU_API_KEY") {
+            Some(Self::with_api_key(api_key))
+        } else {
+            None
         }
+    }
 
-        if let Ok(token) = env::var("TRIBUFU_TOKEN") {
-            self.use_bearer(token);
-        }
-
+    pub fn with_client_from_env() -> Option<Self> {
         let client_id = env::var("TRIBUFU_CLIENT_ID");
         let client_secret = env::var("TRIBUFU_CLIENT_SECRET");
 
         if let (Ok(client_id), Ok(client_secret)) = (client_id, client_secret) {
-            self.use_client(client_id.parse().unwrap(), client_secret);
-        }
-
-        if let Ok(api_key) = env::var("TRIBUFU_API_KEY") {
-            self.use_api_key(api_key);
+            Some(Self::with_client(client_id.parse().unwrap(), client_secret))
+        } else {
+            None
         }
     }
 
-    pub fn use_anonymous(&mut self) {
-        self.credentials_kind = CredentialsType::Anonymous;
-        self.credentials = None;
+    pub fn set_anonymous(&mut self) {
+        self.credentials = Credentials::Anonymous;
     }
 
-    pub fn use_api_key(&mut self, api_key: String) {
-        self.credentials_kind = CredentialsType::ApiKey;
-        self.credentials = Some(api_key);
+    pub fn set_api_key(&mut self, api_key: String) {
+        self.credentials = Credentials::ApiKey { api_key };
     }
 
-    pub fn use_basic(&mut self, basic_token: String) {
-        self.credentials_kind = CredentialsType::Basic;
-        self.credentials = Some(basic_token);
+    pub fn set_clients(&mut self, client_id: u64, client_secret: String) {
+        self.credentials = Credentials::Client {
+            client_id,
+            client_secret,
+        };
     }
 
-    pub fn use_bearer(&mut self, bearer_token: String) {
-        self.credentials_kind = CredentialsType::Bearer;
-        self.credentials = Some(bearer_token);
+    pub fn set_basic_token(&mut self, basic_token: String) {
+        self.token = Some(Token::Basic { basic_token });
     }
 
-    pub fn use_client(&mut self, client_id: u64, client_secret: String) {
-        let credentials_str = format!("{}:{}", client_id, client_secret);
-        self.use_basic(BASE64.encode(credentials_str.as_bytes()));
-    }
-
-    fn set_base_url(&mut self, base_url: String) {
-        self.base_url = base_url;
+    pub fn set_bearer_token(&mut self, access_token: String, refresh_token: Option<String>) {
+        self.token = Some(Token::Bearer {
+            access_token,
+            refresh_token,
+        });
     }
 
     #[inline]
     fn headers(&self) -> HeaderMap {
         let mut headers = Self::default_headers();
 
-        match self.credentials_kind {
-            CredentialsType::ApiKey => {
-                headers.insert(
-                    AUTHORIZATION,
-                    HeaderValue::from_str(&format!(
-                        "ApiKey {}",
-                        self.credentials.as_ref().unwrap()
-                    ))
-                    .unwrap(),
-                );
-            }
-            CredentialsType::Basic => {
-                headers.insert(
-                    AUTHORIZATION,
-                    HeaderValue::from_str(&format!("Basic {}", self.credentials.as_ref().unwrap()))
-                        .unwrap(),
-                );
-            }
-            CredentialsType::Bearer => {
-                headers.insert(
-                    AUTHORIZATION,
-                    HeaderValue::from_str(&format!(
-                        "Bearer {}",
-                        self.credentials.as_ref().unwrap()
-                    ))
-                    .unwrap(),
-                );
-            }
-            _ => {}
+        match &self.token {
+            Some(token) => match token {
+                Token::ApiKey { api_key } => {
+                    headers.insert(
+                        AUTHORIZATION,
+                        HeaderValue::from_str(&format!("ApiKey {}", api_key)).unwrap(),
+                    );
+                }
+                Token::Basic { basic_token } => {
+                    headers.insert(
+                        AUTHORIZATION,
+                        HeaderValue::from_str(&format!("Basic {}", basic_token)).unwrap(),
+                    );
+                }
+                Token::Bearer { access_token, .. } => {
+                    headers.insert(
+                        AUTHORIZATION,
+                        HeaderValue::from_str(&format!("Bearer {}", access_token)).unwrap(),
+                    );
+                }
+            },
+            None => {}
         }
 
         headers
