@@ -21,7 +21,7 @@ crate-type = ["rlib"]
 path = "src/lib.rs"
 
 [features]
-actix = ["tribufu-actix"]
+#actix = ["tribufu-actix"]
 
 [dependencies]
 tribufu-api = { version = "0.1.0", path = "./src/api" }
