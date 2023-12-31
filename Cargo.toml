@@ -24,10 +24,10 @@ path = "src/lib.rs"
 actix = ["tribufu-actix"]
 
 [dependencies]
-tribufu-api = { path = "./src/api" }
-tribufu-constants = { path = "./src/constants" }
-tribufu-types = { path = "./src/types" }
-tribufu-actix = { path = "./src/actix", optional = true }
+tribufu-api = { version = "0.1.0", path = "./src/api" }
+tribufu-constants = { version = "0.1.0", path = "./src/constants" }
+tribufu-types = { version = "0.1.0", path = "./src/types" }
+#tribufu-actix = { version = "0.1.0", path = "./src/actix", optional = true }
 
 [dev-dependencies]
 dotenv = "0.15.0"

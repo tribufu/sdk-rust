@@ -15,8 +15,8 @@ crate-type = ["rlib"]
 path = "lib.rs"
 
 [dependencies]
-tribufu-constants = { path = "../constants" }
-tribufu-types = { path = "../types" }
+tribufu-constants = { version = "0.1.0", path = "../constants" }
+tribufu-types = { version = "0.1.0", path = "../types" }
 base64 = "0.21.5"
 mintaka-error = { version = "0.0.1" }
 alnilam-consts = { version = "0.0.4" }
