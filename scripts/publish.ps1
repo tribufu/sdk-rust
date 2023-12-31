@@ -4,7 +4,7 @@ $crates = @(
     "tribufu-types",
     "tribufu-constants",
     "tribufu-api",
-    "mintaka"
+    "tribufu"
 )
 
 $batchSize = 6
