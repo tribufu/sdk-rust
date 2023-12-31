@@ -1,6 +1,6 @@
 [package]
 name = "tribufu-types"
-version = "0.0.4"
+version = "0.1.0"
 description = "Tribufu Types"
 repository = "https://github.com/Tribufu/TribufuRust"
 authors = ["Tribufu <contact@tribufu.com>"]
