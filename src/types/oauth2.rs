@@ -2,38 +2,39 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OAuth2ResponseType {
     Code,
     Token,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OAuth2ClientType {
     Confidential,
     Public,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OAuth2TokenHintType {
     AccessToken,
     RefreshToken,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OAuth2GrantType {
     AuthorizationCode,
     ClientCredentials,
     DeviceCode,
+    Passkey,
     Password,
     RefreshToken,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OAuth2AuthorizeError {
     AccessDenied,
@@ -45,7 +46,7 @@ pub enum OAuth2AuthorizeError {
     UnsupportedResponseType,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OAuth2TokenType {
     Bearer,
@@ -86,34 +87,47 @@ pub struct OAuth2ErrorResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OAuth2TokenRequest {
     pub grant_type: OAuth2GrantType,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passkey: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_secret: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redirect_uri: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OAuth2TokenResponse {
     pub token_type: OAuth2TokenType,
+
     pub access_token: String,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+
     pub expires_in: u64,
 }
 
@@ -141,7 +155,7 @@ pub struct OAuth2IntrospectionResponse {
 }
 
 impl OAuth2IntrospectionResponse {
-    fn inative() -> Self {
+    pub fn inative() -> Self {
         Self {
             active: false,
             client_id: None,
