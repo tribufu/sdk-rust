@@ -1,12 +1,12 @@
 // Copyright (c) Tribufu. All Rights Reserved.
 
 use actix_web::HttpRequest;
-use tribufu_api::TribufuApi;
 
 pub trait TribufuApiActixExtension {
     fn from_actix(req: &HttpRequest) -> Self;
 }
 
+/*
 impl TribufuApiActixExtension for TribufuApi {
     fn from_actix(req: &HttpRequest) -> Self {
         let mut api = Self::with_client_from_env().unwrap_or_default();
@@ -22,3 +22,4 @@ impl TribufuApiActixExtension for TribufuApi {
         return api;
     }
 }
+*/
