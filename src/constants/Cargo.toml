@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Tribufu Constants"
 repository = "https://github.com/Tribufu/TribufuRust"
 authors = ["Tribufu <contact@tribufu.com>"]
-license = "Apache-2.0"
+license = "MIT"
 edition = "2021"
 publish = true
 

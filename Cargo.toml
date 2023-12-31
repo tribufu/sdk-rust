@@ -4,12 +4,19 @@ version = "0.1.0"
 description = "Tribufu SDK"
 repository = "https://github.com/Tribufu/TribufuRust"
 authors = ["Tribufu <contact@tribufu.com>"]
-license = "Apache-2.0"
+license = "MIT"
 readme = "README.md"
 edition = "2021"
 publish = true
 
-exclude = [".github/", ".vscode/", ".editorconfig", ".gitattributes"]
+exclude = [
+    ".editorconfig",
+    ".gitattributes",
+    ".github/",
+    ".vscode/",
+    "examples/",
+    "scripts/",
+]
 
 [workspace]
 resolver = "2"
