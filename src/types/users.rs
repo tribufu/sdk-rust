@@ -15,7 +15,7 @@ pub enum UserType {
 
 #[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct User {
+pub struct Profile {
     #[serde_as(as = "DisplayFromStr")]
     pub id: u64,
     pub uuid: String,
@@ -38,4 +38,18 @@ pub struct User {
     pub view_count: u32,
     pub created: NaiveDateTime,
     pub updated: Option<NaiveDateTime>,
+}
+
+#[serde_as]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MiniProfile {
+    #[serde_as(as = "DisplayFromStr")]
+    pub id: u64,
+    pub uuid: String,
+    pub name: String,
+    pub display_name: String,
+    #[serde(rename = "type")]
+    pub kind: UserType,
+    pub verified: bool,
+    pub photo_url: String,
 }
