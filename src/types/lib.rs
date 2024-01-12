@@ -2,4 +2,5 @@
 
 pub mod games;
 pub mod oauth2;
+pub mod servers;
 pub mod users;
