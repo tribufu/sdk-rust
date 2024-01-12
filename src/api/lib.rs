@@ -365,7 +365,7 @@ impl TribufuApi {
         Ok(response.json().await?)
     }
 
-    pub async fn get_user_info(&self) -> Result<User> {
+    pub async fn get_user_info(&self) -> Result<Profile> {
         let url = format!("{}/v1/oauth2/userinfo", self.base_url);
         let headers = self.headers();
         let response = self.http.get(url).headers(headers).send().await?;
