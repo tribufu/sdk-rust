@@ -1,0 +1,29 @@
+name: Rust
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "**/*.rs"
+            - "**/Cargo.toml"
+            - "**/Cargo.lock"
+            - ".github/workflows/rust.yml"
+
+    pull_request:
+        branches:
+            - main
+        paths:
+            - "**/*.rs"
+            - "**/Cargo.toml"
+            - "**/Cargo.lock"
+            - ".github/workflows/rust.yml"
+
+jobs:
+    check:
+        name: cargo check
+        runs-on: [linux]
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions-rust-lang/setup-rust-toolchain@v1
+            - run: cargo check --workspace
