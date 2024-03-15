@@ -5,7 +5,7 @@ use mintaka_error::{Error, Result};
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use reqwest::Client;
 use std::env;
-use tribufu_constants::VERSION;
+use tribufu_constants::TRIBUFU_VERSION;
 use tribufu_types::games::Game;
 use tribufu_types::oauth2::{OAuth2GrantType, OAuth2TokenRequest, OAuth2TokenResponse};
 use tribufu_types::users::*;
@@ -35,16 +35,7 @@ pub enum Token {
 }
 
 pub struct TribufuApi {
-    base_url: String,
-    credentials: Credentials,
-    token: Option<Token>,
-    http: Client,
-}
 
-impl Default for TribufuApi {
-    fn default() -> Self {
-        Self::new(Credentials::Anonymous)
-    }
 }
 
 impl TribufuApi {
@@ -73,7 +64,7 @@ impl TribufuApi {
     fn user_agent() -> String {
         format!(
             "Tribufu/{} (+https://api.tribufu.com; {})",
-            VERSION, TARGET_TRIPLE
+            TRIBUFU_VERSION, TARGET_TRIPLE
         )
     }
 
@@ -81,7 +72,10 @@ impl TribufuApi {
     fn default_headers() -> HeaderMap {
         let mut headers = HeaderMap::new();
         headers.insert("X-Tribufu-Language", HeaderValue::from_static("rust"));
-        headers.insert("X-Tribufu-Version", HeaderValue::from_static(VERSION));
+        headers.insert(
+            "X-Tribufu-Version",
+            HeaderValue::from_static(TRIBUFU_VERSION),
+        );
         headers
     }
 
