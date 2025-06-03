@@ -1,0 +1,8 @@
+docs/
+
+.gitignore
+.travis.yml
+Cargo.toml
+git_push.sh
+README.md
+src/lib.rs

@@ -1,10 +1,14 @@
-// Copyright (c) Tribufu. All Rights Reserved
+// Copyright (c) Tribufu. All Rights Reserved.
+// SPDX-License-Identifier: MIT
 
-use tribufu::*;
+use dotenv::dotenv;
+use tribufu::apis::tribufu_generated_api::TribufuGeneratedApi;
+use tribufu::TribufuApi;
 
 #[tokio::main]
 async fn main() {
-    let api = TribufuApi::default();
-    let games = api.get_games(Some(1)).await.unwrap();
-    println!("{:?}", games);
+    dotenv().unwrap();
+    let tribufu = TribufuApi::from_env_or_default(None);
+    let user_info = tribufu.get_user_info().await.unwrap();
+    println!("{:?}", user_info);
 }
