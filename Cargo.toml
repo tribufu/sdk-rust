@@ -1,8 +1,8 @@
 [package]
 name = "tribufu"
-version = "0.1.0"
-description = "Tribufu SDK"
-repository = "https://github.com/Tribufu/TribufuRust"
+version = "1.1.0"
+description = "REST API to access Tribufu services."
+repository = "https://github.com/tribufu/tribufu-rust"
 authors = ["Tribufu <contact@tribufu.com>"]
 license = "MIT"
 readme = "README.md"
@@ -11,31 +11,35 @@ publish = true
 
 exclude = [
     ".editorconfig",
+    ".env*",
     ".gitattributes",
     ".github/",
+    ".openapi-generator-ignore",
+    ".openapi-generator/",
     ".vscode/",
     "examples/",
     "scripts/",
+    "scripts/",
 ]
-
-[workspace]
-resolver = "2"
-members = ["src/*"]
 
 [lib]
 name = "tribufu"
 crate-type = ["rlib"]
 path = "src/lib.rs"
 
-[features]
-#actix = ["tribufu-actix"]
-
 [dependencies]
-tribufu-api = { version = "0.1.0", path = "./src/api" }
-tribufu-constants = { version = "0.1.0", path = "./src/constants" }
-tribufu-types = { version = "0.1.0", path = "./src/types" }
-#tribufu-actix = { version = "0.1.0", path = "./src/actix", optional = true }
+async-trait = "^0.1"
+reqwest = { version = "^0.12", features = ["json", "multipart"] }
+serde = { version = "^1.0", features = ["derive"] }
+serde_json = "^1.0"
+serde_repr = "^0.1"
+serde_with = { version = "^3.8", default-features = false, features = [
+    "base64",
+    "std",
+    "macros",
+] }
+url = "^2.5"
+uuid = { version = "^1.8", features = ["serde", "v4"] }
 
 [dev-dependencies]
 dotenv = "0.15.0"
-tokio = { version = "1", features = ["full"] }
