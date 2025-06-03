@@ -18,7 +18,7 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait TribufuApi: Send + Sync {
+pub trait TribufuGeneratedApi: Send + Sync {
 
     /// POST /v1/oauth2/authorize
     ///
@@ -381,11 +381,11 @@ pub trait TribufuApi: Send + Sync {
     async fn update_user_profile<'id, 'update_profile>(&self, id: &'id str, update_profile: Option<models::UpdateProfile>) -> Result<models::Profile, Error<UpdateUserProfileError>>;
 }
 
-pub struct TribufuApiClient {
+pub struct TribufuGeneratedApiClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl TribufuApiClient {
+impl TribufuGeneratedApiClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -394,7 +394,7 @@ impl TribufuApiClient {
 
 
 #[async_trait]
-impl TribufuApi for TribufuApiClient {
+impl TribufuGeneratedApi for TribufuGeneratedApiClient {
     /// <b>🔒 Required permissions:</b> <code>tribufu.identity.oauth2.authorize</code>
     async fn authorize<'authorize_request>(&self, authorize_request: Option<models::AuthorizeRequest>) -> Result<(), Error<AuthorizeError>> {
         let local_var_configuration = &self.configuration;

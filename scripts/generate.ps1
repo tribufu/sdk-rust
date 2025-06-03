@@ -6,5 +6,5 @@ java -jar ./vendor/openapi-generator/openapi-generator-cli.jar generate `
     -o . `
     --global-property apis,models,supportingFiles,apiDocs=false,modelDocs=false,apiTests=false,modelTests=false `
     --additional-properties=packageName=tribufu,library=reqwest-trait,supportAsync=true,preferUnsignedInt=true `
-    --openapi-normalizer SET_TAGS_FOR_ALL_OPERATIONS=Tribufu `
+    --openapi-normalizer SET_TAGS_FOR_ALL_OPERATIONS=TribufuGenerated `
     --skip-validate-spec

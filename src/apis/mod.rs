@@ -111,7 +111,7 @@ impl From<&str> for ContentType {
     }
 }
 
-pub mod tribufu_api;
+pub mod tribufu_generated_api;
 
 pub mod configuration;
 

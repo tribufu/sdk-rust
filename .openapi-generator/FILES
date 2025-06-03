@@ -1,7 +1,6 @@
 src/apis/configuration.rs
 src/apis/mod.rs
-src/apis/tribufu_api.rs
-src/lib.rs
+src/apis/tribufu_generated_api.rs
 src/models/account.rs
 src/models/application.rs
 src/models/application_type.rs
