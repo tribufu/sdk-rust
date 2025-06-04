@@ -1,0 +1,18 @@
+[package]
+name = "tribufu-sdk"
+version = "0.0.0"
+description = "Tribufu Native"
+repository = "https://github.com/tribufu/tribufu-rust"
+authors = ["Tribufu <contact@tribufu.com>"]
+license = "UNLICENSED"
+edition = "2021"
+publish = false
+
+[lib]
+name = "tribufu_sdk"
+crate-type = ["rlib", "cdylib", "staticlib"]
+path = "lib.rs"
+
+[dependencies]
+tribufu = { path = "../../" }
+libc = "0.2.172"

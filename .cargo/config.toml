@@ -1,0 +1,14 @@
+[build]
+rustflags = ["--cfg", "uuid_unstable"]
+
+[profile.dev]
+lto = "off"
+
+[profile.release]
+lto = "thin"
+
+[target.'cfg(target_os = "windows")']
+rustflags = ["-C", "target-feature=+crt-static"]
+
+[target.'cfg(target_family = "wasm")']
+rustflags = ["--cfg", "web_sys_unstable_apis"]
