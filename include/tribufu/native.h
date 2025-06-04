@@ -5,18 +5,34 @@
 
 #include <tribufu/prelude.h>
 
-TRIBUFU_API void tribufu_api_default(void);
+typedef void TribufuApiGetUserInfoCallbackData;
 
-TRIBUFU_API void tribufu_api_from_env(void);
+typedef void (*TribufuApiGetUserInfoCallback)(void*, const TribufuApiGetUserInfoCallbackData*);
 
-TRIBUFU_API void tribufu_api_from_env_or_default(void);
-
+/**
+ * Gets the user agent string for the Tribufu API.
+ */
 TRIBUFU_API const char *tribufu_api_get_user_agent(void);
 
+TRIBUFU_API void tribufu_api_get_user_info(void *context, TribufuApiGetUserInfoCallback callback);
+
+/**
+ * Gets the version of the Tribufu API.
+ */
 TRIBUFU_API const char *tribufu_api_get_version(void);
 
-TRIBUFU_API void tribufu_api_new(void);
+/**
+ * Initialize the Tribufu API instance.
+ *
+ * This must be called before any other API functions.
+ */
+TRIBUFU_API bool tribufu_api_initialize(void);
 
-TRIBUFU_API void tribufu_api_with_api_key(void);
+/**
+ * Shutdown the Tribufu API instance.
+ *
+ * This must be called when the API is no longer needed.
+ */
+TRIBUFU_API void tribufu_api_shutdown(void);
 
 TRIBUFU_API void tribufu_free_string(char *ptr);
