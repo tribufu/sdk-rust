@@ -1,0 +1,20 @@
+[package]
+name = "tribufu-log"
+version = "0.0.5"
+description = "Tribufu Log"
+repository = "https://github.com/tribufu/tribufu-rust"
+authors = ["Tribufu <contact@tribufu.com>"]
+edition = "2021"
+publish = false
+
+[lib]
+name = "tribufu_log"
+crate-type = ["rlib"]
+path = "lib.rs"
+
+[dependencies]
+tribufu-error = { version = "0.0.5", path = "../error" }
+chrono = "0.4.23"
+env_logger = "0.10.1"
+log = "0.4"
+serde = { version = "1.0", features = ["derive"] }

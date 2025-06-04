@@ -1,0 +1,20 @@
+[package]
+name = "tribufu-platform"
+version = "0.0.5"
+description = "Tribufu Platform"
+repository = "https://github.com/tribufu/tribufu-rust"
+authors = ["Tribufu <contact@tribufu.com>"]
+edition = "2021"
+publish = false
+
+[lib]
+name = "tribufu_platform"
+crate-type = ["rlib"]
+path = "lib.rs"
+
+[dependencies]
+tribufu-error = { version = "0.0.5", path = "../error" }
+dunce = "1.0.4"
+
+[target.'cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))'.dependencies]
+dirs = "5.0.1"

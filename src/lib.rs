@@ -7,6 +7,7 @@
 use crate::apis::configuration::{ApiKey, Configuration};
 use crate::apis::tribufu_generated_api::TribufuGeneratedApiClient;
 use reqwest::Client;
+use tribufu_constants::{RUSTC_VERSION, TARGET_TRIPLE};
 use std::env::{self, consts};
 use std::sync::Arc;
 
@@ -68,7 +69,7 @@ impl TribufuApi {
     /// Gets the user agent string for the Tribufu API client.
     pub fn get_user_agent() -> String {
         let version = Self::get_version();
-        format!("Tribufu/{} ({}; {})", version, consts::OS, consts::ARCH)
+        format!("Tribufu/{} (Rust {}; {})", version, RUSTC_VERSION, TARGET_TRIPLE)
     }
 
     /// Checks if debug mode is enabled.

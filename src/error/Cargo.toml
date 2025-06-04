@@ -1,0 +1,17 @@
+[package]
+name = "tribufu-error"
+version = "0.0.5"
+description = "Tribufu Error"
+repository = "https://github.com/tribufu/tribufu-rust"
+authors = ["Tribufu <contact@tribufu.com>"]
+edition = "2021"
+publish = false
+
+[lib]
+name = "tribufu_error"
+crate-type = ["rlib"]
+path = "lib.rs"
+
+[dependencies]
+anyhow = "1.0.44"
+thiserror = "2.0.12"
