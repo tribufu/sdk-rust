@@ -1,6 +1,6 @@
 # Tribufu Rust
 
-Rust SDK to access Tribufu APIs and services.
+Native SDK to access Tribufu APIs and services.
 
 [![Crates.io][crates-badge]][crates-url]
 [![MIT License][mit-badge]][mit-url]
